@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kirvo — O teu cofre digital</title>
-  <meta name="description" content="Kirvo organiza os teus contratos, bilhetes e subscrições num só lugar. Extração automática com IA, alertas inteligentes e partilha com amigos.">
+  <meta name="description" content="Kirvo organiza os teus contratos, bilhetes e subscrições num só lugar. Alertas inteligentes, partilha com amigos e tudo no mesmo cofre digital.">
   <meta property="og:title" content="Kirvo — O teu cofre digital">
   <meta property="og:description" content="Contratos, bilhetes e subscrições. Organizados. Automáticos. Seguros.">
   <meta property="og:image" content="https://kirvo-app.com/og.png">
@@ -276,15 +276,7 @@ nav.scrolled {
 .pa-dot { width:5px; height:5px; border-radius:50%; background:var(--coral); flex-shrink:0; }
 .pa-txt { font-size:9px; color:var(--coral); font-weight:600; }
 
-/* phone scan animation */
-.phone-items { padding:6px 10px; display:flex; flex-direction:column; gap:6px; position:relative; overflow:hidden; }
-.scan-line {
-  position:absolute; left:0; right:0; height:1.5px;
-  background:linear-gradient(90deg, transparent, var(--coral), transparent);
-  opacity:.4; animation:scan 3s ease-in-out infinite;
-  pointer-events:none; z-index:5;
-}
-@keyframes scan { 0%{top:0;opacity:0} 10%{opacity:.5} 80%{opacity:.5} 100%{top:100%;opacity:0} }
+.phone-items { padding:6px 10px; display:flex; flex-direction:column; gap:6px; }
 
 .p-item { background:var(--card); border:1px solid var(--linha); border-radius:12px; padding:9px 11px; display:flex; align-items:center; gap:9px; }
 .p-item-ico { width:32px; height:32px; border-radius:9px; display:flex; align-items:center; justify-content:center; font-size:14px; flex-shrink:0; }
@@ -466,6 +458,68 @@ footer {
 .reveal { opacity:0; transform:translateY(28px); transition:opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1); }
 .reveal.in { opacity:1; transform:translateY(0); }
 
+/* ── INTRO SPLASH ──────────────────────────────────── */
+body.intro-active { overflow: hidden; }
+
+#intro {
+  position: fixed; inset: 0; z-index: 6000;
+  background: var(--paper);
+  display: flex; align-items: center; justify-content: center;
+  pointer-events: all;
+  animation: intro-fade-out 0.6s 1.65s cubic-bezier(0.4,0,1,1) forwards;
+}
+
+#intro-svg {
+  width: 240px; height: 240px;
+  animation: intro-svg-in 0.65s cubic-bezier(0.16,1,0.3,1) both;
+  overflow: visible;
+}
+
+@keyframes intro-svg-in {
+  from { opacity: 0; transform: scale(0.68); }
+  to   { opacity: 1; transform: scale(1); }
+}
+@keyframes intro-fade-out {
+  to { opacity: 0; pointer-events: none; }
+}
+
+/* Black background rect — shrinks from center after logo settles */
+#ib-bg {
+  fill: var(--ink);
+  transform-origin: 110px 110px; /* center of 220×220 viewBox */
+  animation: ib-bg-out 0.55s 0.88s cubic-bezier(0.4,0,1,1) forwards;
+}
+@keyframes ib-bg-out {
+  to { transform: scale(0.5); opacity: 0; }
+}
+
+/* White blocks — fly to their own corners */
+.ib {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+#ib-tl { animation: fly-tl 0.65s 0.82s cubic-bezier(0.4,0,1,1) both; }
+#ib-tr { animation: fly-tr 0.65s 0.82s cubic-bezier(0.4,0,1,1) both; }
+#ib-bl { animation: fly-bl 0.65s 0.82s cubic-bezier(0.4,0,1,1) both; }
+#ib-br { animation: fly-br 0.65s 0.82s cubic-bezier(0.4,0,1,1) both; }
+
+@keyframes fly-tl {
+  from { transform: translate(0,0);       opacity: 1; }
+  to   { transform: translate(-130px,-130px); opacity: 0; }
+}
+@keyframes fly-tr {
+  from { transform: translate(0,0);       opacity: 1; }
+  to   { transform: translate(130px,-130px);  opacity: 0; }
+}
+@keyframes fly-bl {
+  from { transform: translate(0,0);       opacity: 1; }
+  to   { transform: translate(-130px,130px);  opacity: 0; }
+}
+@keyframes fly-br {
+  from { transform: translate(0,0);       opacity: 1; }
+  to   { transform: translate(130px,130px);   opacity: 0; }
+}
+
 /* ── RESPONSIVE ────────────────────────────────────── */
 @media(max-width:960px){
   nav { padding:15px 22px; }
@@ -487,6 +541,26 @@ footer {
 </style>
 </head>
 <body>
+
+<!-- INTRO SPLASH -->
+<div id="intro" aria-hidden="true">
+  <!--
+    Logo Kirvo recriado em SVG com 4 retângulos independentes.
+    ViewBox 0 0 220 220, proporcional ao ícone original.
+    Blocos:
+      TL (tall-left)  — x29 y29  w66 h95
+      TR (short-right)— x125 y29  w66 h51
+      BL (small-left) — x29  y147 w66 h44
+      BR (tall-right) — x125 y103 w66 h88
+  -->
+  <svg id="intro-svg" viewBox="0 0 220 220" xmlns="http://www.w3.org/2000/svg">
+    <rect id="ib-bg" x="0" y="0" width="220" height="220" rx="50"/>
+    <rect class="ib" id="ib-tl" x="29" y="29"  width="66" height="95" rx="20" fill="white"/>
+    <rect class="ib" id="ib-tr" x="125" y="29"  width="66" height="51" rx="20" fill="white"/>
+    <rect class="ib" id="ib-bl" x="29" y="147" width="66" height="44" rx="20" fill="white"/>
+    <rect class="ib" id="ib-br" x="125" y="103" width="66" height="88" rx="20" fill="white"/>
+  </svg>
+</div>
 
 <!-- CURSOR -->
 <div id="cur"></div>
@@ -525,7 +599,7 @@ footer {
     </h1>
 
     <p class="hero-desc">
-      Contratos, bilhetes e subscrições num só lugar. Extração automática com IA, alertas inteligentes e partilha com quem precisares.
+      Contratos, bilhetes e subscrições num só lugar. Alertas inteligentes, partilha com quem precisares e o teu cofre digital sempre organizado.
     </p>
 
     <div class="hero-ctas">
@@ -623,8 +697,6 @@ footer {
         </div>
 
         <div class="phone-items">
-          <div class="scan-line"></div>
-
           <div class="p-item">
             <div class="p-item-ico" style="background:var(--coral-soft)">⚡</div>
             <div>
@@ -680,8 +752,8 @@ footer {
     <div class="feat-card dark tilt reveal">
       <div class="f-ico">📄</div>
       <div class="f-title">Gestão de Contratos</div>
-      <div class="f-desc">Fotografa ou carrega qualquer contrato. A IA lê automaticamente, extrai datas e valores, e cria alertas antes de expirar. Sem burocracia.</div>
-      <span class="f-tag">IA + privacidade</span>
+      <div class="f-desc">Carrega contratos de qualquer tipo — PDF, imagem, papel digitalizado. O Kirvo organiza fornecedor, valor e datas, e avisa-te antes de expirar. Sem burocracia, sem papel perdido.</div>
+      <span class="f-tag">Alertas de expiração</span>
     </div>
 
     <div class="feat-card tilt reveal">
@@ -712,11 +784,11 @@ footer {
       <span class="f-tag">Insights</span>
     </div>
 
-    <div class="feat-card amber-bg tilt reveal">
-      <div class="f-ico" style="background:rgba(184,130,23,.14)">💬</div>
-      <div class="f-title">O Mediador</div>
-      <div class="f-desc">Em breve — o Kirvo negoceia contratos com fornecedores em teu nome. Só pagas se poupares.</div>
-      <span class="f-tag">Em breve</span>
+    <div class="feat-card tilt reveal">
+      <div class="f-ico" style="background:rgba(79,122,84,.12)">🗂</div>
+      <div class="f-title">Documentos</div>
+      <div class="f-desc">Guarda o teu Cartão de Cidadão, receitas, garantias e seguros. Organizado por categoria, com alertas de validade.</div>
+      <span class="f-tag">Cofre pessoal</span>
     </div>
   </div>
 </section>
@@ -732,16 +804,16 @@ footer {
       <div class="step reveal">
         <div class="step-circle">1</div>
         <div class="step-title">Carregas o documento</div>
-        <div class="step-desc">Fotografia, PDF ou imagem. Qualquer formato. O Kirvo aceita tudo e processa na hora.</div>
+        <div class="step-desc">Fotografia, PDF ou imagem. Qualquer formato aceite. Tudo fica guardado em segurança no teu cofre.</div>
       </div>
       <div class="step reveal">
         <div class="step-circle">2</div>
-        <div class="step-title">A IA lê e percebe</div>
-        <div class="step-desc">Extração automática de datas, valores e fornecedores. Os teus dados pessoais nunca saem do servidor europeu.</div>
+        <div class="step-title">Preenchs os detalhes</div>
+        <div class="step-desc">Nome, fornecedor, valor e datas — rápido e direto. Os teus dados ficam nos servidores europeus, só teus.</div>
       </div>
       <div class="step reveal">
         <div class="step-circle">3</div>
-        <div class="step-title">Recbes alertas</div>
+        <div class="step-title">Recebes alertas</div>
         <div class="step-desc">Notificações inteligentes antes de expirar ou renovar. Nunca mais te esqueces de nada importante.</div>
       </div>
     </div>
@@ -770,9 +842,9 @@ footer {
       <div class="sec-desc">Servidores na Irlanda. Cumprimos o RGPD na íntegra. Os teus dados nunca saem da Europa sem consentimento.</div>
     </div>
     <div class="sec-item reveal">
-      <span class="sec-icon">🤖</span>
-      <div class="sec-title">IA sem dados pessoais</div>
-      <div class="sec-desc">Antes de qualquer análise, removemos NIFs, IBANs e moradas. A IA vê estrutura — nunca quem és.</div>
+      <span class="sec-icon">🚫</span>
+      <div class="sec-title">Sem venda de dados</div>
+      <div class="sec-desc">Os teus documentos são exclusivamente teus. Nunca vendemos, partilhamos ou analisamos o teu conteúdo com terceiros.</div>
     </div>
     <div class="sec-item reveal">
       <span class="sec-icon">🗑</span>
@@ -830,6 +902,14 @@ footer {
 </footer>
 
 <script>
+/* ─── INTRO ───────────────────────────────────────── */
+document.body.classList.add('intro-active');
+setTimeout(() => {
+  const intro = document.getElementById('intro');
+  if (intro) intro.remove();
+  document.body.classList.remove('intro-active');
+}, 2350);
+
 /* ─── CURSOR ──────────────────────────────────────── */
 const cur  = document.getElementById('cur');
 const ring = document.getElementById('cur-ring');
@@ -928,7 +1008,7 @@ const tickItems = [
   ['Alertas Inteligentes', true],
   ['Bilhetes de Eventos', false],
   ['Subscrições', false],
-  ['IA Privada', true],
+  ['Exportar em PDF', true],
   ['QR Code automático', false],
   ['Partilha com amigos', false],
   ['RGPD compliant', true],
